@@ -9,7 +9,7 @@ import { MustMatch } from '@app/_helpers';
 @Component({ templateUrl: 'register.component.html', standalone: false })
 export class RegisterComponent implements OnInit {
     form!: FormGroup;
-    loading = false;
+    submitting = false;   // renamed from 'loading'
     submitted = false;
 
     constructor(
@@ -34,21 +34,17 @@ export class RegisterComponent implements OnInit {
         });
     }
 
-    // convenience getter for easy access to form fields
     get f() { return this.form.controls; }
 
     onSubmit() {
         this.submitted = true;
-
-        // reset alerts on submit
         this.alertService.clear();
 
-        // stop here if form is invalid
         if (this.form.invalid) {
             return;
         }
 
-        this.loading = true;
+        this.submitting = true;   // was: this.loading = true
         this.accountService.register(this.form.value)
             .pipe(first())
             .subscribe({
@@ -58,7 +54,7 @@ export class RegisterComponent implements OnInit {
                 },
                 error: error => {
                     this.alertService.error(error);
-                    this.loading = false;
+                    this.submitting = false;   // was: this.loading = false
                 }
             });
     }
