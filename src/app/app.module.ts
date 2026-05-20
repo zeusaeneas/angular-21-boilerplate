@@ -13,6 +13,8 @@ import { AppComponent } from './app.component';
 import { AlertComponent } from './_components';
 import { HomeComponent } from './home';
 
+import { environment } from '@environments/environment';
+ 
 @NgModule({
     imports: [
         BrowserModule,
@@ -29,6 +31,7 @@ import { HomeComponent } from './home';
         { provide: APP_INITIALIZER, useFactory: appInitializer, multi: true, deps: [AccountService] },
         { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        ...(environment.production ? [] : [fakeBackendProvider]) 
 
         // provider used to create fake backend
         // fakeBackendProvider
